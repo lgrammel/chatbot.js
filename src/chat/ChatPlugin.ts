@@ -2,6 +2,16 @@ import { FastifyInstance } from "fastify";
 import zod from "zod";
 import { OpenAIClient } from "../open-ai/OpenAIClient";
 import { createNextId } from "../util/createNextId";
+import Handlebars from "handlebars";
+
+Handlebars.registerHelper({
+  eq: (v1, v2) => v1 === v2,
+  neq: (v1, v2) => v1 !== v2,
+  lt: (v1, v2) => v1 < v2,
+  gt: (v1, v2) => v1 > v2,
+  lte: (v1, v2) => v1 <= v2,
+  gte: (v1, v2) => v1 >= v2,
+});
 
 export const ChatPlugin = ({
   openAiClient,
@@ -73,8 +83,16 @@ export const ChatPlugin = ({
         text: message,
       });
 
+      const expandedPrompt = Handlebars.compile(prompt, {
+        noEscape: true,
+      })({
+        messages: chat.messages,
+      });
+
+      console.log(expandedPrompt);
+
       const completionResult = await openAiClient.generateCompletion({
-        prompt,
+        prompt: expandedPrompt,
         model: "text-davinci-003",
         maxTokens: 256,
       });
