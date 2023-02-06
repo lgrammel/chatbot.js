@@ -1,6 +1,7 @@
 {
   "name": "@rubberduck/chatbot.js",
   "version": "0.0.1",
+  "private": false,
   "scripts": {
     "build": "tsc",
     "start": "pnpm ts-node-dev src/ChatbotServerCLI.ts --port 3000 --host 127.0.0.1 --template-folder example"
