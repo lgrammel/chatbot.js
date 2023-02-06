@@ -1,8 +1,9 @@
 import { FastifyInstance } from "fastify";
 import zod from "zod";
+import { OpenAIClient } from "../openai/OpenAIClient";
 import { createNextId } from "../util/createNextId";
 
-export const ChatPlugin = () =>
+export const ChatPlugin = ({ openAiClient }: { openAiClient: OpenAIClient }) =>
   async function plugin(server: FastifyInstance) {
     const logger = server.log;
 
@@ -66,9 +67,16 @@ export const ChatPlugin = () =>
         text: message,
       });
 
+      const completionResult = await openAiClient.generateCompletion({
+        prompt: "Write a random paragraph.\n\n",
+        model: "text-davinci-003",
+        maxTokens: 256,
+      });
+
       chat.messages.push({
         author: "bot",
-        text: `${message.split("").reverse().join("")} ${chat.messages.length}`,
+        // text: `${message.split("").reverse().join("")} ${chat.messages.length}`,
+        text: completionResult.completion,
       });
 
       return chat;

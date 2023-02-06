@@ -39,7 +39,7 @@ export async function startService<T>({
     messageKey: "message",
   });
 
-  logger.info({ configuration }, `Starting ${name}.`);
+  logger.info(`Starting ${name}.`);
 
   const { shutdown } = await initialize(configuration, logger);
 
