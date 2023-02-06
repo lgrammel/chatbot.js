@@ -1,10 +1,6 @@
 # chatbot.js
 
-> &nbsp;
->
-> #### Get a HTTP chatbot server that calls the Open AI API with your custom prompt running in less than 3 minutes.
->
-> &nbsp;
+> #### ⚡ Get a HTTP chatbot server that calls the Open AI API with your custom prompt running in less than 3 minutes. ⚡
 
 ## Setup
 
