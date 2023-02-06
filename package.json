@@ -1,7 +1,16 @@
 {
   "name": "@rubberduckai/chatbot.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
+  "homepage": "https://github.com/rubberduck-ai/chatbot.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rubberduck-ai/chatbot.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rubberduck-ai/chatbot.js/issues"
+  },
+  "license": "MIT",
   "scripts": {
     "build": "tsc",
     "start": "pnpm ts-node-dev src/ChatbotServerCLI.ts --port 3000 --host 127.0.0.1 --template-folder example"
