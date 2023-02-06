@@ -11,7 +11,10 @@ export const ChatPlugin = () =>
       string,
       {
         id: string;
-        messages: Array<string>;
+        messages: Array<{
+          author: "bot" | "user";
+          text: string;
+        }>;
       }
     >();
 
@@ -58,7 +61,15 @@ export const ChatPlugin = () =>
 
       const { message } = bodySchema.parse(request.body);
 
-      chat.messages.push(message);
+      chat.messages.push({
+        author: "user",
+        text: message,
+      });
+
+      chat.messages.push({
+        author: "bot",
+        text: `${message.split("").reverse().join("")} ${chat.messages.length}`,
+      });
 
       return chat;
     });
