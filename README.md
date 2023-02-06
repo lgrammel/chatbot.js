@@ -3,14 +3,7 @@ A simple chatbot service
 
 ## Development
 
-Pre-requisites:
+Pre-requisites: `brew install pnpm`
 
-```bash
-brew install pnpm
-```
-
-Install dependencies:
-
-```bash
-pnpm install
-```
+* Install dependencies: `pnpm install`
+* Start server: `pnpm start`

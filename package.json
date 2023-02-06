@@ -2,8 +2,12 @@
   "name": "@rubberduck/chatbot.js",
   "version": "0.0.0",
   "scripts": {
+    "start": "pnpm ts-node src/chatbot.ts"
   },
   "devDependencies": {
+    "@types/node": "16.11.7",
+    "typescript": "4.9.4",
+    "ts-node": "10.9.1"
   },
   "dependencies": {
   }
