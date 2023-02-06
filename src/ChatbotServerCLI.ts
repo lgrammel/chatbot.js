@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Option } from "commander";
 import Fastify from "fastify";
 import hyperid from "hyperid";
