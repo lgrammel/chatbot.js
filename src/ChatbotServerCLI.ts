@@ -1,9 +1,10 @@
 import { Option } from "commander";
 import Fastify from "fastify";
 import hyperid from "hyperid";
+import fs from "node:fs/promises";
 import zod from "zod";
 import { ChatPlugin } from "./chat/ChatPlugin";
-import { OpenAIClient } from "./openai/OpenAIClient";
+import { OpenAIClient } from "./open-ai/OpenAIClient";
 import { startService } from "./program/startService";
 
 startService({
@@ -19,13 +20,17 @@ startService({
     new Option("--open-ai-api-key <string>", "OpenAI API key")
       .env("OPEN_AI_API_KEY")
       .makeOptionMandatory(),
+    new Option("--template-folder <string>", "Template folder")
+      .env("TEMPLATE_FOLDER")
+      .makeOptionMandatory(),
   ],
   configurationSchema: zod.object({
     host: zod.string(),
     port: zod.number(),
     openAiApiKey: zod.string(),
+    templateFolder: zod.string(),
   }),
-  async initialize(configuration, logger) {
+  async initialize({ templateFolder, openAiApiKey, host, port }, logger) {
     const server = Fastify({
       logger,
 
@@ -40,13 +45,14 @@ startService({
     server.register(
       ChatPlugin({
         openAiClient: new OpenAIClient({
-          apiKey: configuration.openAiApiKey,
+          apiKey: openAiApiKey,
           logger,
         }),
+        prompt: await fs.readFile(`${templateFolder}/prompt.template`, "utf-8"),
       })
     );
 
-    await server.listen({ host: configuration.host, port: configuration.port });
+    await server.listen({ host, port });
 
     return {
       async shutdown() {
