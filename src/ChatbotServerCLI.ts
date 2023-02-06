@@ -2,6 +2,7 @@ import { Option } from "commander";
 import Fastify from "fastify";
 import hyperid from "hyperid";
 import zod from "zod";
+import { ChatPlugin } from "./chat/ChatPlugin";
 import { startService } from "./program/startService";
 
 startService({
@@ -27,6 +28,8 @@ startService({
       // Unified key for the request ID in the logs:
       requestIdLogLabel: "requestId",
     });
+
+    server.register(ChatPlugin());
 
     await server.listen({ host: configuration.host, port: configuration.port });
 
