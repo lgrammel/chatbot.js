@@ -7,26 +7,59 @@ export const ChatPlugin = () =>
     const logger = server.log;
 
     const nextId = createNextId();
-    const chats = new Map<string, true>();
+    const chats = new Map<
+      string,
+      {
+        id: string;
+        messages: Array<string>;
+      }
+    >();
 
     server.post("/chat", async function (request, reply) {
-      const chatId = nextId();
-      chats.set(chatId, true);
-      return { id: chatId };
+      const chat = { id: nextId(), messages: [] };
+      chats.set(chat.id, chat);
+      return chat;
     });
 
-    server.get("/chat/:id", async function (request, reply) {
+    server.get("/chat/:chatId", async function (request, reply) {
       const parameterSchema = zod.object({
-        id: zod.string(),
+        chatId: zod.string(),
       });
 
-      const { id } = parameterSchema.parse(request.params);
+      const { chatId } = parameterSchema.parse(request.params);
 
-      if (!chats.has(id)) {
+      const chat = chats.get(chatId);
+
+      if (chat == undefined) {
         reply.code(404);
         return;
       }
 
-      return { id };
+      return chat;
+    });
+
+    server.post("/chat/:chatId/message", async function (request, reply) {
+      const parameterSchema = zod.object({
+        chatId: zod.string(),
+      });
+
+      const { chatId } = parameterSchema.parse(request.params);
+
+      const chat = chats.get(chatId);
+
+      if (chat == undefined) {
+        reply.code(404);
+        return;
+      }
+
+      const bodySchema = zod.object({
+        message: zod.string(),
+      });
+
+      const { message } = bodySchema.parse(request.body);
+
+      chat.messages.push(message);
+
+      return chat;
     });
   };
